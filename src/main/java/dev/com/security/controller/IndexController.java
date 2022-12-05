@@ -5,6 +5,7 @@ import dev.com.security.model.Member;
 import dev.com.security.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class IndexController {
 
     private final MemberService memberService;
@@ -40,17 +42,11 @@ public class IndexController {
         return "manager";
     }
 
-    @GetMapping("/members/login")
+    @GetMapping("/loginForm")
     public String loginForm(Model model) {
         model.addAttribute("memberDto", new MemberDto());
-        return "members/loginForm";
+        return "loginForm";
     }
-
-//    @PostMapping("/members/login")
-//    public String login(MemberDto dto) {
-//        dto.getEmail();
-//        dto.getPassword();
-//    }
 
     @GetMapping("/members/new")
     public String memberForm(Model model){
@@ -59,20 +55,10 @@ public class IndexController {
     }
 
     @PostMapping("/members/new")
-    public String newMember(MemberDto memberDto, BindingResult bindingResult, Model model){
-
-        if(bindingResult.hasErrors()){
-            return "/members/joinForm";
-        }
-
-        try {
-            Member member = Member.createMember(memberDto, passwordEncoder);
-            memberService.saveMember(member);
-        } catch (IllegalStateException e){
-            model.addAttribute("errorMessage", e.getMessage());
-            return "/members/joinForm";
-        }
-
-        return "redirect:/members/login";
+    public String newMember(MemberDto memberDto){
+        log.info("memberDto = {}", memberDto);
+        Member entity = memberService.dtoToEntity(memberDto);
+        memberService.saveMember(entity);
+        return "redirect:/loginForm";
     }
 }

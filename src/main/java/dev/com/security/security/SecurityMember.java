@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -18,21 +19,32 @@ public class SecurityMember implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(member
-                .getRoles()
-                .split(","))
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+        collection.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return member.getRoles();
+            }
+        });
+        System.out.println("collection = " + collection);
+        return collection;
     }
 
+//        return Arrays.stream(member
+//                .getRoles()
+//                .split(","))
+//                .map(SimpleGrantedAuthority::new)
+//                .toList();
     @Override
     public String getPassword() {
+        System.out.println("getPassword = " + member.getPassword());
         return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getEmail();
+        System.out.println("member.getUsername = " + member.getUsername());
+        return member.getUsername();
     }
 
     @Override
