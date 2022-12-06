@@ -6,6 +6,8 @@ import dev.com.security.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +40,7 @@ public class IndexController {
     }
 
     @GetMapping("/manager")
-    public String manager() {
+    public @ResponseBody String manager() {
         return "manager";
     }
 
@@ -57,8 +59,21 @@ public class IndexController {
     @PostMapping("/members/new")
     public String newMember(MemberDto memberDto){
         log.info("memberDto = {}", memberDto);
+        memberDto.setRoles("ROLE_MANAGER");
         Member entity = memberService.dtoToEntity(memberDto);
         memberService.saveMember(entity);
         return "redirect:/loginForm";
+    }
+
+    @GetMapping("/info")
+    @Secured("ROLE_ADMIN")
+    public @ResponseBody String info() {
+        return "개인정보";
+    }
+
+    @GetMapping("/data")
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+    public @ResponseBody String data() {
+        return "데이터";
     }
 }

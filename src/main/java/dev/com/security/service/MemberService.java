@@ -43,7 +43,7 @@ public class MemberService {
                     .email(dto.getEmail())
                     .password(password)
                     .address(dto.getAddress())
-                    .roles("Admin")
+                    .roles(dto.getRoles())
                     .build();
             return member;
     }
