@@ -5,6 +5,7 @@ import dev.com.security.model.Member;
 import dev.com.security.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,12 +18,12 @@ import java.util.stream.Stream;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Member saveMember(Member member){
 //        validateDuplicateMember(member.getEmail());
