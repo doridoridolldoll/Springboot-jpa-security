@@ -1,4 +1,4 @@
-package dev.com.security.security;
+package dev.com.security.security.auth;
 
 import dev.com.security.model.Member;
 import lombok.Data;

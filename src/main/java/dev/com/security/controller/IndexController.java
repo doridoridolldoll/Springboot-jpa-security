@@ -2,7 +2,7 @@ package dev.com.security.controller;
 
 import dev.com.security.dto.MemberDto;
 import dev.com.security.model.Member;
-import dev.com.security.security.PrincipalDetails;
+import dev.com.security.security.auth.PrincipalDetails;
 import dev.com.security.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

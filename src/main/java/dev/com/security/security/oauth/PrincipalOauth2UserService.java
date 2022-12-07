@@ -1,7 +1,8 @@
-package dev.com.security.security;
+package dev.com.security.security.oauth;
 
 import dev.com.security.model.Member;
 import dev.com.security.repository.MemberRepository;
+import dev.com.security.security.auth.PrincipalDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
