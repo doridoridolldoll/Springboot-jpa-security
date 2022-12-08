@@ -4,6 +4,7 @@ import dev.com.security.model.Member;
 import dev.com.security.repository.MemberRepository;
 import dev.com.security.security.auth.PrincipalDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -11,14 +12,11 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-@Service
+@Configuration
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
     private MemberRepository memberRepository;
-
 
     //구글로 부터 받은 userRequest 데이터에 대한 후처리되는 함수
     //함수 종료시 @AuthenticationPrincipal 어노테이션이 만들어진다.
@@ -36,7 +34,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String provider = userRequest.getClientRegistration().getClientId(); //google
         String providerId = oAuth2User.getAttribute("sub");
         String username = provider + "_" + providerId;
-        String password = bCryptPasswordEncoder.encode("겟인데어");
         String email = oAuth2User.getAttribute("email");
         String role = "ROLE_USER";
 
@@ -47,7 +44,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             userEntity = Member.builder()
                     .username(username)
                     .email(email)
-                    .password(password)
                     .roles(role)
                     .provider(provider)
                     .providerId(providerId)

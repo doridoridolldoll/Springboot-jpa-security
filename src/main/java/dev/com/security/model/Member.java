@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Entity
 @Table(name = "member")
 @Getter
@@ -48,17 +52,10 @@ public class Member {
         this.providerId = providerId;
     }
 
-//    public static Member createMember(MemberDto memberDto, PasswordEncoder passwordEncoder){
-//        String password = passwordEncoder.encode(memberDto.getPassword());
-//        Member member = Member.builder()
-//                .email(memberDto.getEmail())
-//                .username(memberDto.getUsername())
-//                .password(password)
-//                .address(memberDto.getAddress())
-//                .roles("Admin")
-//                .build();
-//
-//        return member;
-//    }
-
+    public List<String> getRolesList() {
+        if (this.roles.length() > 0) {
+            return Arrays.asList(this.roles.split("m"));
+        }
+        return new ArrayList<>();
+    }
 }

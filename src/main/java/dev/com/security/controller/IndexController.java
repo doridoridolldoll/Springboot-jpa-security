@@ -46,18 +46,18 @@ public class IndexController {
         return "OAuth 세션 정보 확인";
     }
 
-    @GetMapping("/user")
+    @GetMapping("/api/user")
     public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         System.out.println("securityMember = " + principalDetails.getMember());
         return "user";
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/api/admin")
     public @ResponseBody String admin() {
         return "admin";
     }
 
-    @GetMapping("/manager")
+    @GetMapping("/api/manager")
     public @ResponseBody String manager() {
         return "manager";
     }
@@ -69,13 +69,13 @@ public class IndexController {
     }
 
     @GetMapping("/members/new")
-    public String memberForm(Model model){
+    public String memberForm(Model model) {
         model.addAttribute("memberDto", new MemberDto());
         return "members/joinForm";
     }
 
     @PostMapping("/members/new")
-    public String newMember(MemberDto memberDto){
+    public String newMember(MemberDto memberDto) {
         log.info("memberDto = {}", memberDto);
         memberDto.setRoles("ROLE_MANAGER");
         Member entity = memberService.dtoToEntity(memberDto);
@@ -93,5 +93,15 @@ public class IndexController {
     @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
     public @ResponseBody String data() {
         return "데이터";
+    }
+
+    @GetMapping("/home")
+    public @ResponseBody String home() {
+        return "<h1>home</h1>";
+    }
+
+    @PostMapping("/token")
+    public @ResponseBody String token() {
+        return "<h1>token</h1>";
     }
 }
