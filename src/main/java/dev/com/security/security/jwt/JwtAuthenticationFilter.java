@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.BufferedReader;
@@ -27,12 +28,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final AuthenticationManager authenticationManager;
-
     // /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         System.out.println("JwtAuthenticationFilter : 로그인 시도중");
+        System.out.println("request = " + request);
+        System.out.println("response = " + response);
 
         // 1.username, password 받아서
         try {
@@ -47,22 +48,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             System.out.println("member = " + member);
 
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(member.getUsername(), member.getPassword());
+                    new UsernamePasswordAuthenticationToken(member.getUsername(), (member.getPassword()));
+            System.out.println("authenticationToken = " + authenticationToken);
 
             // PrincipalDetailsService의 loadUserByUsername() 함수가 실행됨
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-            System.out.println("principalDetails = " + principalDetails.getUsername());
+//            System.out.println("authentication = " + authentication);
 
+            // authentication 객체가 session영역에 저장됨.
+//            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+//            System.out.println("principalDetails = " + principalDetails.getMember().getUsername());
+//            return authentication;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         // 2.정상인지 로그인 시도
         // 3.PrincipalDetailsService 호출 -> loadUserByUsername() 함수 실행
         // 4.PrincipalDetails 를 세션에 담고 (권한 관리를 위해서)
         // 5.JWT 토큰 만들어서 응답
-        return super.attemptAuthentication(request, response);
+        return null;
     }
 
 }

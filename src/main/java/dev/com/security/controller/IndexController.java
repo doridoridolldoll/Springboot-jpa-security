@@ -10,7 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +18,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class IndexController {
 
     private final MemberService memberService;
-    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/test/login")
     public @ResponseBody String testLogin(Authentication authentication,
@@ -75,10 +77,15 @@ public class IndexController {
     }
 
     @PostMapping("/members/new")
-    public String newMember(MemberDto memberDto) {
-        log.info("memberDto = {}", memberDto);
-        memberDto.setRoles("ROLE_MANAGER");
-        Member entity = memberService.dtoToEntity(memberDto);
+    public String newMember(Member member) {
+//        log.info("memberDto = {}", memberDto);
+//        memberDto.setRoles("ROLE_MANAGER");
+//        Member entity = memberService.dtoToEntity(memberDto);
+        Member entity = Member.builder()
+                .username(member.getUsername())
+                .password(member.getPassword())
+                .roles(Collections.singleton(new SimpleGrantedAuthority("ROLE_MANAGER")).toString())
+                .build();
         memberService.saveMember(entity);
         return "redirect:/loginForm";
     }

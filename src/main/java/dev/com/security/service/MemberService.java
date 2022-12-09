@@ -22,8 +22,6 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Member saveMember(Member member){
 //        validateDuplicateMember(member.getEmail());
@@ -38,11 +36,10 @@ public class MemberService {
 //        }
 //    }
     public Member dtoToEntity(MemberDto dto) {
-            String password = bCryptPasswordEncoder.encode(dto.getPassword());
             Member member = Member.builder()
                     .username(dto.getUsername())
                     .email(dto.getEmail())
-                    .password(password)
+                    .password(dto.getPassword())
                     .address(dto.getAddress())
                     .roles(dto.getRoles())
                     .build();
