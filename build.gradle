@@ -27,6 +27,9 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.0.0'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.0.0'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.1'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '3.0.0'
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '6.0.0'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
