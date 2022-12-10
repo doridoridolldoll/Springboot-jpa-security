@@ -3,6 +3,7 @@ package dev.com.security.controller;
 import dev.com.security.dao.UserDao;
 import dev.com.security.dto.AuthRequest;
 import dev.com.security.model.Member;
+import dev.com.security.security.auth.PrincipalDetailsService;
 import dev.com.security.security.jwt.JwtUtils;
 import dev.com.security.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class jwtController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UserDetailsService userDetailsService;
+    private PrincipalDetailsService userDetailsService;
     @Autowired
     private JwtUtils jwtUtils;
 

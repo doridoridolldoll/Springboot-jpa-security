@@ -1,6 +1,7 @@
 package dev.com.security.security.jwt;
 
 import dev.com.security.dao.UserDao;
+import dev.com.security.security.auth.PrincipalDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final UserDao userDetailsService;
+    private final PrincipalDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
     @Override
