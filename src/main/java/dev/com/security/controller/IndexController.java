@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ import java.util.Collections;
 public class IndexController {
 
     private final MemberService memberService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/test/login")
     public @ResponseBody String testLogin(Authentication authentication,
@@ -83,8 +85,8 @@ public class IndexController {
 //        Member entity = memberService.dtoToEntity(memberDto);
         Member entity = Member.builder()
                 .username(member.getUsername())
-                .password(member.getPassword())
-                .roles(Collections.singleton(new SimpleGrantedAuthority("ROLE_MANAGER")).toString())
+                .password(passwordEncoder.encode(member.getPassword()))
+                .roles("ROLE_MANAGER")
                 .build();
         memberService.saveMember(entity);
         return "redirect:/loginForm";
