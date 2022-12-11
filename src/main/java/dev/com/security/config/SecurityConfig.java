@@ -79,13 +79,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .userDetailsService(userDetailsService())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .userDetailsService(userDetailsService())
 //                .addFilter(corsFilter) //@CrossOrigin(인증X), 시큐리티 필터에 등록(인증O)
                 .formLogin()
-                .and()
-//                .httpBasic().disable()
-                .authenticationProvider(authenticationProvider())
+                .loginPage("/loginForm")
+                .loginProcessingUrl("/login")
+                .and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/user/**").authenticated();
@@ -113,11 +112,6 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-//    }
 
     @Bean
     public UserDetailsService userDetailsService() {
